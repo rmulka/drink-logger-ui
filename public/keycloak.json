@@ -1,0 +1,8 @@
+{
+  "realm": "drinklogger",
+  "auth-server-url": "http://localhost:8081/auth/",
+  "ssl-required": "external",
+  "resource": "drink-logger",
+  "public-client": true,
+  "confidential-port": 0
+}
