@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import AuthContext from '../context/AuthContext';
 import Keycloak from 'keycloak-js';
 
@@ -12,10 +12,14 @@ const AuthProvider = (props) => {
         });
     }, []);
 
+    const contextValue = useMemo(() => (
+        { keycloakState, setKeycloakState }
+    ), [keycloakState]);
+
     const ConsumerComponents = () => (
         keycloakState.keycloak !== null
         ? (
-            <AuthContext.Provider value={{ keycloakState, setKeycloakState }}>
+            <AuthContext.Provider value={contextValue}>
                 {props.children}
             </AuthContext.Provider>
         ) : (

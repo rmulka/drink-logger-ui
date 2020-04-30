@@ -11,8 +11,9 @@ export const TABLE_HEADERS = {
         'Country',
         'Website',
         'ABV',
-        'IBU',
         'Description'
     ]
 };
+
+
 

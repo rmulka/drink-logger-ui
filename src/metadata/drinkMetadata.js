@@ -1,4 +1,4 @@
-import {BEER} from '../constants/drinkConstants';
+import { BEER } from '../constants/drinkConstants';
 
 export const DRINK_FIELDS = {
     [BEER]: [
@@ -11,7 +11,6 @@ export const DRINK_FIELDS = {
         'country',
         'website',
         'abv',
-        'ibu',
         'description'
     ]
 };

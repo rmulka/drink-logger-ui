@@ -1,121 +1,113 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useState, useEffect, createRef } from 'react';
+import { Link } from 'react-router-dom';
 
-import { AppBar } from '@material-ui/core';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import MenuIcon from '@material-ui/icons/Menu';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar'
+import { makeStyles } from '@material-ui/core/styles';
 
-import AuthContext from '../../context/AuthContext';
-
-// const useStyles = makeStyles((theme) => ({
-//     link: {
-//         display: 'flex',
-//     },
-//     icon: {
-//         marginRight: theme.spacing(0.5),
-//         width: 20,
-//         height: 20,
-//     },
-// }));
+import HEADER_LINKS from '../../metadata/headerMetadata';
+import { NAV_BAR_HEIGHT } from '../../constants/styleConstants';
+import LoginLogoutButton from '../Navigation/LoginLogoutButton';
+import CustomPopper from './CustomPopper';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
+        display: 'flex',
     },
-    menuButton: {
+    header: {
+        minHeight: NAV_BAR_HEIGHT,
+    },
+    paper: {
         marginRight: theme.spacing(2),
     },
-    title: {
-        flexGrow: 1,
+    toolbar: {
+        minHeight: NAV_BAR_HEIGHT,
+    },
+    profileButton: {
+        marginLeft: 'auto',
     },
 }));
 
-const Header = (props) => {
+const Header = () => {
     const classes = useStyles();
 
-    const [loggedIn, setLoggedIn] = useState(false);
-    const { keycloakState, setKeycloakState } = useContext(AuthContext);
+    const [arrLength] = useState(HEADER_LINKS.length);
+    const [open, setOpen] = useState([]);
+    const [populating, setPopulating] = useState(true);
+    const [anchorRefs, setAnchorRefs] = useState([]);
 
     useEffect(() => {
-        setLoggedIn(keycloakState.authenticated);
-    }, [keycloakState.authenticated]);
+        setAnchorRefs(anchorRefs => (
+            Array(arrLength).fill(null).map((_, i) => anchorRefs[i] || createRef())
+        ));
+        setOpen(open => (
+            Array(arrLength).fill(false)
+        ));
+        setPopulating(false);
+    }, [arrLength]);
 
-    const logout = () => {
-        props.history.push('/');
-        setKeycloakState(prevState => ({ ...prevState, authenticated: false }));
-        keycloakState.keycloak.logout();
+    const handleToggle = (idx) => {
+        setOpen(prevOpen => prevOpen.map((el, i) => i === idx ? !el : false))
     };
 
-    const login = () => {
-        keycloakState.keycloak.init({ onLoad: 'login-required' }).then(authenticated => {
-            setKeycloakState(prevState => ({...prevState, authenticated}))
-        });
-    };
-
-    const LoginLogout = () => (
-        loggedIn
-        ? <Button color='inherit' onClick={logout}>Logout</Button>
-        : <Button color='inherit' onClick={login}>Login</Button>
+    if (populating) return (
+        <div className={classes.header}>
+            <AppBar position='static'>
+                <Toolbar className={classes.toolBar}>
+                </Toolbar>
+            </AppBar>
+        </div>
     );
 
     return (
-        <AppBar position='static'>
-            <Toolbar>
-                <IconButton edge='start' className={classes.menuButton} color='inherit' aria-label='menu'>
-                    <MenuIcon />
-                </IconButton>
-                <Typography variant='h6' className={classes.title}>
-                    Drink Logger
-                </Typography>
-                <LoginLogout />
-            </Toolbar>
-        </AppBar>
-    )
+        <div className={classes.header}>
+            <AppBar position='static'>
+                <Toolbar className={classes.toolBar}>
+                    {HEADER_LINKS.map((headerLink, idx) => {
+                        if (headerLink.subLinks && headerLink.subLinks.length > 0) {
+                            return (
+                                <div key={headerLink.label}>
+                                    <Button
+                                        ref={anchorRefs[idx]}
+                                        aria-controls={open[idx] ? `${headerLink.label}-list` : undefined}
+                                        aria-haspopup="true"
+                                        onClick={() => handleToggle(idx)}
+                                    >
+                                        {headerLink.label}
+                                    </Button>
+                                    <CustomPopper
+                                        open={open[idx]}
+                                        setOpen={setOpen}
+                                        arrLength={arrLength}
+                                        anchorEl={anchorRefs[idx]}
+                                        index={idx}
+                                        subLinks={headerLink.subLinks}
+                                        label={headerLink.label}
+                                    />
+                                </div>
+                            )
+                        } else if (headerLink.path && headerLink.path.length > 0) {
+                            return (
+                                <div key={headerLink.label}>
+                                    <Button
+                                        component={Link}
+                                        to={headerLink.path}
+                                    >
+                                        {headerLink.label}
+                                    </Button>
+                                </div>
+                            )
+                        }
+                        throw new Error('Missing attributes in header metadata');
+                    })}
+                    <div className={classes.profileButton}>
+                        <LoginLogoutButton />
+                    </div>
+                </Toolbar>
+            </AppBar>
+        </div>
+    );
 };
 
-export default withRouter(Header);
-
-// import React from 'react';
-// import { makeStyles } from '@material-ui/core/styles';
-// import Typography from '@material-ui/core/Typography';
-// import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-// import Link from '@material-ui/core/Link';
-// import HomeIcon from '@material-ui/icons/Home';
-// import WhatshotIcon from '@material-ui/icons/Whatshot';
-// import GrainIcon from '@material-ui/icons/Grain';
-//
-//
-// function handleClick(event) {
-//     event.preventDefault();
-//     console.info('You clicked a breadcrumb.');
-// }
-//
-// export default function IconBreadcrumbs() {
-//     const classes = useStyles();
-//
-//     return (
-//         <Breadcrumbs aria-label="breadcrumb">
-//             <Link color="inherit" href="/" onClick={handleClick} className={classes.link}>
-//                 <HomeIcon className={classes.icon} />
-//                 Material-UI
-//             </Link>
-//             <Link
-//                 color="inherit"
-//                 href="/getting-started/installation/"
-//                 onClick={handleClick}
-//                 className={classes.link}
-//             >
-//                 <WhatshotIcon className={classes.icon} />
-//                 Core
-//             </Link>
-//             <Typography color="textPrimary" className={classes.link}>
-//                 <GrainIcon className={classes.icon} />
-//                 Breadcrumb
-//             </Typography>
-//         </Breadcrumbs>
-//     );
-// }
+export default React.memo(Header);

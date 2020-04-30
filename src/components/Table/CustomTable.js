@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,19 +12,32 @@ import TablePaginationActions from './TablePaginationActions';
 import { TABLE_HEADERS } from '../../metadata/customTableMetadata';
 import { DRINK_FIELDS } from '../../metadata/drinkMetadata';
 import CollapsibleTextCell from './Cell/CollapsibleTextCell';
+import { DEFAULT_MARGIN, SIDE_BAR_WIDTH } from '../../constants/styleConstants';
+import FilterContext from '../../context/FilterContext';
 
 const useStyles = makeStyles({
+    container: {
+        maxWidth: `calc(100vw - ${SIDE_BAR_WIDTH}px - ${DEFAULT_MARGIN}px)`,
+        marginLeft: DEFAULT_MARGIN,
+        marginRight: DEFAULT_MARGIN,
+    },
     table: {
         minWidth: 500,
     },
+    tablePagination: {
+        position: 'static'
+    }
 });
 
 const rowsPerPageList = [10, 25, 50];
 
 const CustomTable = ({ data, tableType }) => {
     const classes = useStyles();
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(25);
+
+    const { filterState } = useContext(FilterContext);
+
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(25);
 
     const tableHeaders = TABLE_HEADERS[tableType];
 
@@ -39,16 +52,22 @@ const CustomTable = ({ data, tableType }) => {
         setPage(0);
     };
 
+    useEffect(() => {
+        setPage(0);
+    }, [filterState.filters]);
+
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} classes={{ root: classes.container }}>
             <Table className={classes.table} aria-label="custom pagination table">
                 <TableHead>
                     <TableRow>
-                        <TablePagination
+                        <TablePagination classes={{ toolbar: classes.tablePagination }}
                             rowsPerPageOptions={rowsPerPageList}
                             count={data.length}
                             rowsPerPage={rowsPerPage}
                             page={page}
+                            scope='row'
+                            colSpan={tableHeaders.length}
                             SelectProps={{
                                 inputProps: { 'aria-label': 'rows per page' },
                                 native: true,
@@ -58,6 +77,8 @@ const CustomTable = ({ data, tableType }) => {
                             ActionsComponent={TablePaginationActions}
                         />
                     </TableRow>
+                </TableHead>
+                <TableHead>
                     <TableRow>
                         {tableHeaders.map((header, idx) => (
                             <TableCell key={idx} align={"left"}>{header}</TableCell>
@@ -70,11 +91,8 @@ const CustomTable = ({ data, tableType }) => {
                             : data
                     ).map((row) => (
                         <TableRow key={row.id}>
-                            {/*{DRINK_FIELDS[tableType].map((field, idx) => (*/}
-                            {/*    <TableCell key={idx} align="left">{row[field]}</TableCell>*/}
-                            {/*))}*/}
                             {DRINK_FIELDS[tableType].map((field, idx) => (
-                                <CollapsibleTextCell key={idx} text={row[field]} />//{row[field]}</CollapsibleTextCell>
+                                <CollapsibleTextCell key={idx} text={row[field]} />
                             ))}
                         </TableRow>
                     ))}
@@ -90,4 +108,4 @@ const CustomTable = ({ data, tableType }) => {
     );
 };
 
-export default CustomTable;
+export default React.memo(CustomTable);

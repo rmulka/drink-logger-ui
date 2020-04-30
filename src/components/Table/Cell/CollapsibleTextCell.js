@@ -28,11 +28,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const CollapsibleTextCell = ({ key, text }) => {
+const CollapsibleTextCell = ({ text }) => {
     const classes = useStyles();
 
     const [expanded, setExpanded] = useState(false);
-    const [height, setHeight] = useState({ clientHeight: 0, scrollHeight: 0 });
+    const [overflow, setOverflow] = useState(false);
 
     const ref = useRef(null);
 
@@ -44,16 +44,14 @@ const CollapsibleTextCell = ({ key, text }) => {
         ? classes.text
         : classes.textTruncated;
 
-    const isOverflown = () => (height.scrollHeight > height.clientHeight);
-
     useEffect(() => {
-        setHeight(prevState => ({ ...prevState, clientHeight: ref.current.clientHeight, scrollHeight: ref.current.scrollHeight }));
+        setOverflow(ref.current.scrollHeight > ref.current.clientHeight);
     }, []);
 
     return (
-        <TableCell key={key} className={classes.root}>
+        <TableCell className={classes.root}>
             <Typography ref={ref} className={textClass}>{text}</Typography>
-            {isOverflown() &&
+            {overflow &&
             <IconButton
                 className={clsx(classes.expand, {
                     [classes.expandOpen]: expanded,
