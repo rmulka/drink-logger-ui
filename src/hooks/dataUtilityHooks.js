@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 
-import FilterContext from '../context/FilterContext';
+import ApiDataContext from '../context/ApiDataContext';
 
 export const useFilter = (filter) => {
-    const { filterState } = useContext(FilterContext);
-    return [...new Set(filterState.filteredData.map(entry => entry[filter]).filter(entry => entry))];
+    const { filteredData } = useContext(ApiDataContext);
+    return [...new Set(filteredData.map(entry => entry[filter]).filter(entry => entry))];
 };

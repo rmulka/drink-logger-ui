@@ -1,4 +1,4 @@
-import { BEERS_PATH, PUBLIC_PATH } from '../constants/pathConstants';
+import { BROWSE_BEERS_PATH, PUBLIC_PATH } from '../constants/pathConstants';
 
 const BROWSE = 'Browse';
 const HOME = 'Home';
@@ -13,7 +13,7 @@ const HEADER_LINKS = [
         label: BROWSE,
         subLinks: [
             {
-                path: BEERS_PATH,
+                path: BROWSE_BEERS_PATH,
                 label: BEERS,
             }
         ]

@@ -1,1 +1,1 @@
-export const BEER = 'beer';
+export const BEER = 'beers';

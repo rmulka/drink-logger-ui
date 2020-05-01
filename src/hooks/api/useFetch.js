@@ -11,7 +11,7 @@ const useFetch = (initialResource) => {
     const [resource] = useState(initialResource);
     const [defaultHeaders] = useState(useDefaultHeaders());
 
-    const { dataState, dispatch } = useContext(ApiDataContext);
+    const { data, dispatch } = useContext(ApiDataContext);
 
     useEffect(() => {
         let didCancel = false;
@@ -36,7 +36,7 @@ const useFetch = (initialResource) => {
         return () => { didCancel = true };
     }, [resource, url, defaultHeaders, dispatch]);
 
-    return { ...dataState };
+    return { ...data };
 };
 
 export default useFetch;

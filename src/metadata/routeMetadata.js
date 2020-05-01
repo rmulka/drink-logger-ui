@@ -1,11 +1,11 @@
-import { BEERS_PATH, PUBLIC_PATH } from '../constants/pathConstants';
-import BeersLayout from '../components/Layout/secured/BeersLayout';
+import { BROWSE_PATH, PUBLIC_PATH } from '../constants/pathConstants';
+import BrowseLayout from '../components/Layout/secured/BrowseLayout';
 import Welcome from '../components/Layout/public/Welcome';
 
 const ROUTES = [
     {
-        path: BEERS_PATH,
-        component: BeersLayout,
+        path: BROWSE_PATH,
+        component: BrowseLayout,
         protected: true,
         exact: true
     },

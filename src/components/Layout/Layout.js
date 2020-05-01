@@ -5,8 +5,6 @@ import { NAV_BAR_HEIGHT, DEFAULT_MARGIN } from '../../constants/styleConstants';
 
 import Header from '../Header/Header';
 import Routes from '../routes/Routes';
-import DataProvider from '../../provider/DataProvider';
-import FilterProvider from '../../provider/FilterProvider';
 
 const useStyles = makeStyles(() => ({
     mainContainer: {
@@ -26,13 +24,9 @@ const Layout = () => {
     return (
         <div className={classes.layout}>
             <Header />
-            <DataProvider>
-                <FilterProvider>
-                    <div className={classes.mainContainer}>
-                        <Routes />
-                    </div>
-                </FilterProvider>
-            </DataProvider>
+            <div className={classes.mainContainer}>
+                <Routes />
+            </div>
         </div>
     )
 };

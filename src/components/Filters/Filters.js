@@ -5,8 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { getFilterDetails, SELECT_FILTER } from '../../metadata/filterMetadata';
 import { DEFAULT_MARGIN, SIDE_BAR_WIDTH } from '../../constants/styleConstants';
 import CustomSelect from './CustomSelect';
-import FilterContext from '../../context/FilterContext';
 import { SET_FILTER } from '../../constants/filterConstants';
+import ApiDataContext from '../../context/ApiDataContext';
 
 const useStyles = makeStyles({
     container: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 const Filters = ({ drinkType }) => {
     const classes = useStyles();
 
-    const { dispatch } = useContext(FilterContext);
+    const { dispatch } = useContext(ApiDataContext);
 
     const filterElements = [];
 
@@ -48,8 +48,9 @@ const Filters = ({ drinkType }) => {
         }
     });
 
-
-    return <div className={classes.container}>{filterElements}</div>
+    return (
+        <div className={classes.container}>{filterElements}</div>
+    )
 };
 
 export default React.memo(Filters);

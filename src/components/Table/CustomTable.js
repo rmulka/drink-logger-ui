@@ -13,7 +13,9 @@ import { TABLE_HEADERS } from '../../metadata/customTableMetadata';
 import { DRINK_FIELDS } from '../../metadata/drinkMetadata';
 import CollapsibleTextCell from './Cell/CollapsibleTextCell';
 import { DEFAULT_MARGIN, SIDE_BAR_WIDTH } from '../../constants/styleConstants';
-import FilterContext from '../../context/FilterContext';
+import ApiDataContext from '../../context/ApiDataContext';
+import Loading from '../General/Loading';
+import useFetch from '../../hooks/api/useFetch';
 
 const useStyles = makeStyles({
     container: {
@@ -31,17 +33,25 @@ const useStyles = makeStyles({
 
 const rowsPerPageList = [10, 25, 50];
 
-const CustomTable = ({ data, tableType }) => {
+const CustomTable = ({ tableType }) => {
     const classes = useStyles();
+    useFetch(tableType);
 
-    const { filterState } = useContext(FilterContext);
+    const {
+        filteredData,
+        filters,
+        isLoading,
+        isError,
+        errorMessage,
+        errorCode
+    } = useContext(ApiDataContext);
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(25);
 
     const tableHeaders = TABLE_HEADERS[tableType];
 
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -54,7 +64,24 @@ const CustomTable = ({ data, tableType }) => {
 
     useEffect(() => {
         setPage(0);
-    }, [filterState.filters]);
+    }, [filters]);
+
+    if (isLoading) {
+        return (
+            <TableContainer component={Paper} classes={{root: classes.container}}>
+                <Loading/>
+            </TableContainer>
+        )
+    }
+
+    // TODO - create error handling component
+    if (isError) {
+        return (
+            <TableContainer component={Paper} classes={{root: classes.container}}>
+                <div>{errorCode}: {errorMessage}</div>;
+            </TableContainer>
+        )
+    }
 
     return (
         <TableContainer component={Paper} classes={{ root: classes.container }}>
@@ -63,7 +90,7 @@ const CustomTable = ({ data, tableType }) => {
                     <TableRow>
                         <TablePagination classes={{ toolbar: classes.tablePagination }}
                             rowsPerPageOptions={rowsPerPageList}
-                            count={data.length}
+                            count={filteredData.length}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             scope='row'
@@ -87,8 +114,8 @@ const CustomTable = ({ data, tableType }) => {
                 </TableHead>
                 <TableBody>
                     {(rowsPerPage > 0
-                            ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            : data
+                            ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            : filteredData
                     ).map((row) => (
                         <TableRow key={row.id}>
                             {DRINK_FIELDS[tableType].map((field, idx) => (
