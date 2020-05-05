@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useEffect, createRef, useReducer } from 'react';
 import { Link } from 'react-router-dom';
 
 import Button from '@material-ui/core/Button';
@@ -10,13 +10,17 @@ import HEADER_LINKS from '../../metadata/headerMetadata';
 import { NAV_BAR_HEIGHT } from '../../constants/styleConstants';
 import LoginLogoutButton from '../Navigation/LoginLogoutButton';
 import CustomPopper from './CustomPopper';
+import headerReducer from '../../reducers/headerReducer';
+import { HEADER_INIT, TOGGLE_LINK } from '../../constants/headerConstants';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
     },
     header: {
+        width: '100%',
         minHeight: NAV_BAR_HEIGHT,
+        margin: 0,
     },
     paper: {
         marginRight: theme.spacing(2),
@@ -29,26 +33,29 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const initialState = {
+    arrLength: HEADER_LINKS.length,
+    open: [],
+    populating: true,
+    anchorRefs: [],
+};
+
 const Header = () => {
     const classes = useStyles();
 
-    const [arrLength] = useState(HEADER_LINKS.length);
-    const [open, setOpen] = useState([]);
-    const [populating, setPopulating] = useState(true);
-    const [anchorRefs, setAnchorRefs] = useState([]);
+    const [state, dispatch] = useReducer(headerReducer, initialState);
+    const {
+        open,
+        populating,
+        anchorRefs,
+    } = state;
 
     useEffect(() => {
-        setAnchorRefs(anchorRefs => (
-            Array(arrLength).fill(null).map((_, i) => anchorRefs[i] || createRef())
-        ));
-        setOpen(open => (
-            Array(arrLength).fill(false)
-        ));
-        setPopulating(false);
-    }, [arrLength]);
+        dispatch({ type: HEADER_INIT })
+    }, [dispatch]);
 
     const handleToggle = (idx) => {
-        setOpen(prevOpen => prevOpen.map((el, i) => i === idx ? !el : false))
+        dispatch({ type: TOGGLE_LINK, index: idx })
     };
 
     if (populating) return (
@@ -61,8 +68,8 @@ const Header = () => {
     );
 
     return (
-        <div className={classes.header}>
-            <AppBar position='static'>
+        <div>
+            <AppBar className={classes.header} position='absolute'>
                 <Toolbar className={classes.toolBar}>
                     {HEADER_LINKS.map((headerLink, idx) => {
                         if (headerLink.subLinks && headerLink.subLinks.length > 0) {
@@ -78,8 +85,7 @@ const Header = () => {
                                     </Button>
                                     <CustomPopper
                                         open={open[idx]}
-                                        setOpen={setOpen}
-                                        arrLength={arrLength}
+                                        dispatch={dispatch}
                                         anchorEl={anchorRefs[idx]}
                                         index={idx}
                                         subLinks={headerLink.subLinks}

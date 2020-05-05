@@ -1,19 +1,25 @@
-import { BEER } from '../constants/drinkConstants';
+import { BEER, WINE } from '../constants/drinkConstants';
 import { useFilter } from '../hooks/dataUtilityHooks';
 
 export const SELECT_FILTER = 'select';
 
 const commonFilters = [
     {
-        name: 'name',
+        name: 'country',
         inputType: SELECT_FILTER,
         filterHook: useFilter,
-        filterName: 'name',
+        filterName: 'country',
     },
 ];
 
 const beerFilters = [
     ...commonFilters,
+    {
+        name: 'name',
+        inputType: SELECT_FILTER,
+        filterHook: useFilter,
+        filterName: 'name',
+    },
     {
         name: 'brewer',
         inputType: SELECT_FILTER,
@@ -44,19 +50,61 @@ const beerFilters = [
         filterHook: useFilter,
         filterName: 'state',
     },
+];
+
+const wineFilters = [
+    ...commonFilters,
     {
-        name: 'country',
+        name: 'vintage',
         inputType: SELECT_FILTER,
         filterHook: useFilter,
-        filterName: 'country',
-    }
+        filterName: 'vintage',
+    },
+    {
+        name: 'county',
+        inputType: SELECT_FILTER,
+        filterHook: useFilter,
+        filterName: 'county',
+    },
+    {
+        name: 'designation',
+        inputType: SELECT_FILTER,
+        filterHook: useFilter,
+        filterName: 'designation',
+    },
+    {
+        name: 'province',
+        inputType: SELECT_FILTER,
+        filterHook: useFilter,
+        filterName: 'province',
+    },
+    {
+        name: 'title',
+        inputType: SELECT_FILTER,
+        filterHook: useFilter,
+        filterName: 'title',
+    },
+    {
+        name: 'variety',
+        inputType: SELECT_FILTER,
+        filterHook: useFilter,
+        filterName: 'variety',
+    },
+    {
+        name: 'winery',
+        inputType: SELECT_FILTER,
+        filterHook: useFilter,
+        filterName: 'winery',
+    },
 ];
 
 export const getFilterDetails = (drinkType) => {
     switch(drinkType) {
         case BEER:
             return beerFilters;
+        case WINE:
+            return wineFilters;
         default:
-            throw new Error('Unsupported drink type');
+            throw new Error(`Unsupported drink type ${drinkType}`);
     }
 };

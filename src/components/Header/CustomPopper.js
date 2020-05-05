@@ -7,12 +7,13 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Link } from 'react-router-dom';
 import Popper from '@material-ui/core/Popper';
+import { CLOSE_POPPER, CLOSE_ALL } from '../../constants/headerConstants';
 
-const CustomPopper = ({ open, setOpen, arrLength, anchorEl, index, subLinks, label }) => {
+const CustomPopper = ({ open, dispatch, anchorEl, index, subLinks, label }) => {
     const handleListKeyDown = (event) => {
         if (event.key === 'Tab') {
             event.preventDefault();
-            setOpen(Array(arrLength).fill(false));
+            dispatch({ type: CLOSE_ALL });
         }
     };
 
@@ -21,7 +22,7 @@ const CustomPopper = ({ open, setOpen, arrLength, anchorEl, index, subLinks, lab
             return;
         }
 
-        setOpen(prevOpen => prevOpen.map((el, i) => i === index ? false : el));
+        dispatch({ type: CLOSE_POPPER, index })
     };
 
     return (
@@ -54,4 +55,4 @@ const CustomPopper = ({ open, setOpen, arrLength, anchorEl, index, subLinks, lab
     )
 };
 
-export default CustomPopper;
+export default React.memo(CustomPopper);

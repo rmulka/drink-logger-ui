@@ -3,6 +3,7 @@ import React from 'react';
 import { TextField } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core/styles';
+
 import { DEFAULT_MARGIN } from '../../constants/styleConstants';
 
 const useStyles = makeStyles(theme => ({
@@ -13,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const CustomSelect = ({ name, label, placeholder, options, onChange }) => {
+const CustomSelect = ({ name, label, value, placeholder, options, onChange }) => {
     const classes = useStyles();
 
     const changeFilter = (e, value) => {
@@ -26,7 +27,7 @@ const CustomSelect = ({ name, label, placeholder, options, onChange }) => {
             id={name}
             name={name}
             options={options}
-            // getOptionLabel={option => option.label}
+            value={value}
             onChange={changeFilter}
             renderInput={props => (
                 <TextField
@@ -40,4 +41,4 @@ const CustomSelect = ({ name, label, placeholder, options, onChange }) => {
     );
 };
 
-export default CustomSelect;
+export default React.memo(CustomSelect);

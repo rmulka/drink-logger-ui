@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { startCase } from 'lodash'
+
 import { makeStyles } from '@material-ui/core/styles';
 
 import { getFilterDetails, SELECT_FILTER } from '../../metadata/filterMetadata';
@@ -11,20 +12,22 @@ import ApiDataContext from '../../context/ApiDataContext';
 const useStyles = makeStyles({
     container: {
         width: `${SIDE_BAR_WIDTH}px`,
-        padding: `${DEFAULT_MARGIN}px`,
+        marginTop: `${DEFAULT_MARGIN * 2}px`,
+        margin: `${DEFAULT_MARGIN}px`,
     }
 });
 
 const Filters = ({ drinkType }) => {
     const classes = useStyles();
 
-    const { dispatch } = useContext(ApiDataContext);
+    const { dispatch, filters } = useContext(ApiDataContext);
 
     const filterElements = [];
 
-    const changeFilter = (name, value) => {
-        dispatch({ type: SET_FILTER, filter: name, value })
-    };
+    const changeFilter = useCallback(
+        (name, value) => dispatch({ type: SET_FILTER, filter: name, value }),
+        [dispatch]
+    );
 
     getFilterDetails(drinkType).forEach((filterElement, i) => {
         const { name, filterHook, filterName } = filterElement;
@@ -34,17 +37,17 @@ const Filters = ({ drinkType }) => {
                     <CustomSelect
                         key={i}
                         name={name}
-                        // value={filters[name]}
                         label={startCase(name)}
+                        value={filters[name] || null}
                         aria-label={startCase(name)}
                         options={filterHook(filterName)}
                         placeholder={`Select ${startCase(name)}`}
-                        onChange={(name, value) => changeFilter(name, value)}
+                        onChange={changeFilter}
                     />
                 );
                 break;
             default:
-                throw new Error('Unsupported filter type');
+                throw new Error(`Unsupported filter type ${filterElement.inputType}`);
         }
     });
 
@@ -53,4 +56,6 @@ const Filters = ({ drinkType }) => {
     )
 };
 
-export default React.memo(Filters);
+const areEqual = (prevProps, nextProps) => prevProps.drinkType === nextProps.drinkType;
+
+export default React.memo(Filters, areEqual);

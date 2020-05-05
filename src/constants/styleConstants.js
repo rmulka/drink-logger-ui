@@ -1,3 +1,3 @@
-export const NAV_BAR_HEIGHT = 50;
+export const NAV_BAR_HEIGHT = 70;
 export const DEFAULT_MARGIN = 8;
 export const SIDE_BAR_WIDTH = 275;

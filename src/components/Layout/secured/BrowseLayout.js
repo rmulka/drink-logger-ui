@@ -10,7 +10,7 @@ const BrowseLayout = (props) => {
 
     return (
         <BrowseContainer>
-            <DataProvider>
+            <DataProvider resource={resource}>
                 <Filters drinkType={resource} />
                 <CustomTable tableType={resource} />
             </DataProvider>
@@ -18,4 +18,6 @@ const BrowseLayout = (props) => {
     )
 };
 
-export default BrowseLayout;
+const areEqual = (prevProps, nextProps) => prevProps.match.params.resource === nextProps.match.params.resource;
+
+export default React.memo(BrowseLayout, areEqual);

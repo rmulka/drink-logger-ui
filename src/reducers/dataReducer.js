@@ -30,7 +30,7 @@ const dataReducer = (state, action) => {
                 errorCode: action.error.errorCode
             };
         case (RESET_FILTER_DATA):
-            return { ...state, filters: {}, filteredData: action.payload };
+            return { ...state, filters: {} };
         case (SET_FILTER):
             return {
                 ...state,

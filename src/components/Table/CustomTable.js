@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,6 +9,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import Paper from '@material-ui/core/Paper';
+
 import TablePaginationActions from './TablePaginationActions';
 import { TABLE_HEADERS } from '../../metadata/customTableMetadata';
 import { DRINK_FIELDS } from '../../metadata/drinkMetadata';
@@ -35,7 +37,6 @@ const rowsPerPageList = [10, 25, 50];
 
 const CustomTable = ({ tableType }) => {
     const classes = useStyles();
-    useFetch(tableType);
 
     const {
         filteredData,
@@ -68,7 +69,7 @@ const CustomTable = ({ tableType }) => {
 
     if (isLoading) {
         return (
-            <TableContainer component={Paper} classes={{root: classes.container}}>
+            <TableContainer component={Paper} classes={{ root: classes.container }}>
                 <Loading/>
             </TableContainer>
         )
@@ -77,7 +78,7 @@ const CustomTable = ({ tableType }) => {
     // TODO - create error handling component
     if (isError) {
         return (
-            <TableContainer component={Paper} classes={{root: classes.container}}>
+            <TableContainer component={Paper} classes={{ root: classes.container }}>
                 <div>{errorCode}: {errorMessage}</div>;
             </TableContainer>
         )
@@ -123,7 +124,6 @@ const CustomTable = ({ tableType }) => {
                             ))}
                         </TableRow>
                     ))}
-
                     {emptyRows > 0 && (
                         <TableRow style={{ height: 53 * emptyRows }}>
                             <TableCell colSpan={6} />

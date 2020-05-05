@@ -9,8 +9,8 @@ import Routes from '../routes/Routes';
 const useStyles = makeStyles(() => ({
     mainContainer: {
         height: `calc(100vh - ${NAV_BAR_HEIGHT}px - ${DEFAULT_MARGIN * 2}px)`,
-        width: '100%',
         margin: `${DEFAULT_MARGIN}px`,
+        marginTop: `${NAV_BAR_HEIGHT}px`,
     },
     layout: {
         height: '100%',

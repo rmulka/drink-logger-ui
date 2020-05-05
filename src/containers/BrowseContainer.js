@@ -6,17 +6,16 @@ const useStyles = makeStyles({
     container: {
         display: 'flex',
         flexDirection: 'row',
-        width: '100%',
-        margin: `${DEFAULT_MARGIN}px`
+        // margin: `${DEFAULT_MARGIN}px`
     }
 });
 
-const BrowseContainer = (props) => {
+const BrowseContainer = ({ children }) => {
     const classes = useStyles();
 
     return (
         <div className={classes.container}>
-            {props.children}
+            {children}
         </div>
     )
 };

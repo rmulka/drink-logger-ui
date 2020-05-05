@@ -1,4 +1,5 @@
-import { BEER } from '../constants/drinkConstants';
+import { BEER, WINE } from '../constants/drinkConstants';
+import { DRINK_FIELDS } from './drinkMetadata';
 
 export const TABLE_HEADERS = {
     [BEER]: [
@@ -12,7 +13,19 @@ export const TABLE_HEADERS = {
         'Website',
         'ABV',
         'Description'
-    ]
+    ],
+    [WINE]: [
+        'Vintage',
+        'Country',
+        'County',
+        'Designation',
+        'Points',
+        'Price',
+        'Province',
+        'Title',
+        'Variety',
+        'Winery'
+    ],
 };
 
 
