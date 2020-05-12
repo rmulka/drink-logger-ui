@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { DEFAULT_MARGIN } from '../../constants/styleConstants';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     root: {
         flexGrow: 1,
         width: '100%',

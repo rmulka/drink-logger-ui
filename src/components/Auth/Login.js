@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
-import Button from '@material-ui/core/Button';
+
+import ListItem from '@material-ui/core/ListItem';
+
 import AuthContext from '../../context/AuthContext';
 
 const Login = () => {
@@ -12,10 +14,10 @@ const Login = () => {
     };
 
     return (
-        <Button onClick={login}>
+        <ListItem button={true} onClick={login}>
             Login
-        </Button>
+        </ListItem>
     );
 };
 
-export default Login;
+export default React.memo(Login);

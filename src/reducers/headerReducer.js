@@ -12,7 +12,7 @@ const headerReducer = (state, action) => {
         case (HEADER_INIT):
             return {
                 ...state,
-                anchorRefs: Array(state.arrLength).fill(null).map((_, i) => createRef()),
+                anchorRefs: Array(state.arrLength).fill(null).map((_) => createRef()),
                 open: Array(state.arrLength).fill(false),
                 populating: false,
             };

@@ -1,15 +1,19 @@
+import LoginLogout from '../components/Navigation/LoginLogout';
 import {
     BROWSE_BEERS_PATH,
     BROWSE_WINES_PATH,
-    PUBLIC_PATH
+    PUBLIC_PATH,
+    ACCOUNT_PATH
 } from '../constants/pathConstants';
 
 const BROWSE = 'Browse';
 const HOME = 'Home';
 const BEERS = 'Beers';
 const WINES = 'Wines';
+const LOGIN_LOGOUT = 'Login Logout';
+const ACCOUNT = 'Account';
 
-const HEADER_LINKS = [
+export const HEADER_LINKS = [
     {
         label: HOME,
         path: PUBLIC_PATH,
@@ -29,4 +33,13 @@ const HEADER_LINKS = [
     }
 ];
 
-export default HEADER_LINKS;
+export const PROFILE_LINKS = [
+    {
+        label: ACCOUNT,
+        path: ACCOUNT_PATH,
+    },
+    {
+        label: LOGIN_LOGOUT,
+        component: LoginLogout,
+    }
+];

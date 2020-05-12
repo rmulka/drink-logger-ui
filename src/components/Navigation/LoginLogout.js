@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, forwardRef } from 'react';
+
 import AuthContext from '../../context/AuthContext';
 import Login from '../Auth/Login';
 import Logout from '../Auth/Logout';
 
-const LoginLogoutButton = () => {
+const LoginLogout = forwardRef((props, ref) => {
     const { keycloakState } = useContext(AuthContext);
     const [authenticated, setAuthenticated] = useState(false);
 
@@ -12,6 +13,6 @@ const LoginLogoutButton = () => {
     }, [keycloakState.authenticated]);
 
     return authenticated ? <Logout /> : <Login />
-};
+});
 
-export default LoginLogoutButton;
+export default React.memo(LoginLogout);

@@ -1,5 +1,4 @@
 import { BEER, WINE } from '../constants/drinkConstants';
-import { DRINK_FIELDS } from './drinkMetadata';
 
 export const TABLE_HEADERS = {
     [BEER]: [

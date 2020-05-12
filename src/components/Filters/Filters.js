@@ -8,6 +8,7 @@ import { DEFAULT_MARGIN, SIDE_BAR_WIDTH } from '../../constants/styleConstants';
 import CustomSelect from './CustomSelect';
 import { SET_FILTER } from '../../constants/filterConstants';
 import ApiDataContext from '../../context/ApiDataContext';
+import { getFilterOptions } from '../../util/dataUtilities';
 
 const useStyles = makeStyles({
     container: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles({
 const Filters = ({ drinkType }) => {
     const classes = useStyles();
 
-    const { dispatch, filters } = useContext(ApiDataContext);
+    const { dispatch, filters, filteredData } = useContext(ApiDataContext);
 
     const filterElements = [];
 
@@ -29,9 +30,8 @@ const Filters = ({ drinkType }) => {
         [dispatch]
     );
 
-    getFilterDetails(drinkType).forEach((filterElement, i) => {
-        const { name, filterHook, filterName } = filterElement;
-        switch (filterElement.inputType) {
+    getFilterDetails(drinkType).forEach(({ name, filterName, inputType }, i) => {
+        switch (inputType) {
             case SELECT_FILTER:
                 filterElements.push(
                     <CustomSelect
@@ -40,14 +40,14 @@ const Filters = ({ drinkType }) => {
                         label={startCase(name)}
                         value={filters[name] || null}
                         aria-label={startCase(name)}
-                        options={filterHook(filterName)}
+                        options={getFilterOptions(filterName, filteredData)}
                         placeholder={`Select ${startCase(name)}`}
                         onChange={changeFilter}
                     />
                 );
                 break;
             default:
-                throw new Error(`Unsupported filter type ${filterElement.inputType}`);
+                throw new Error(`Unsupported filter type ${inputType}`);
         }
     });
 

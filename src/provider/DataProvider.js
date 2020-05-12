@@ -1,4 +1,4 @@
-import React, { useMemo, useReducer, useEffect, useState, useContext } from 'react';
+import React, { useMemo, useReducer, useEffect, useState } from 'react';
 
 import ApiDataContext from '../context/ApiDataContext';
 import dataReducer from '../reducers/dataReducer';
@@ -78,8 +78,6 @@ const DataProvider = ({ children, resource }) => {
 
         return () => { didCancel = true };
     }, [defaultHeaders, dispatch, resource]);
-
-    console.log('provider');
 
     return (
         <ApiDataContext.Provider value={contextValue}>

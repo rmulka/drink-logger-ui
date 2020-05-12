@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { withRouter } from 'react-router-dom'
-import Button from '@material-ui/core/Button';
+
+import ListItem from '@material-ui/core/ListItem';
 
 import AuthContext from '../../context/AuthContext';
 
@@ -14,10 +15,10 @@ const Logout = (props) => {
     };
 
     return (
-        <Button onClick={logout}>
+        <ListItem button={true} onClick={logout}>
             Logout
-        </Button>
+        </ListItem>
     );
 };
 
-export default withRouter(Logout);
+export default React.memo(withRouter(Logout));

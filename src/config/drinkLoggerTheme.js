@@ -39,7 +39,6 @@ const drinkLoggerTheme = createMuiTheme({
             variant: 'contained',
         },
     },
-    // shadows: ["none"],
 });
 
 export default drinkLoggerTheme;

@@ -17,7 +17,6 @@ import CollapsibleTextCell from './Cell/CollapsibleTextCell';
 import { DEFAULT_MARGIN, SIDE_BAR_WIDTH } from '../../constants/styleConstants';
 import ApiDataContext from '../../context/ApiDataContext';
 import Loading from '../General/Loading';
-import useFetch from '../../hooks/api/useFetch';
 
 const useStyles = makeStyles({
     container: {
