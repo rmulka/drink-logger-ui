@@ -49,7 +49,7 @@ const CustomPopper = ({ open, dispatch, anchorEl, index, options, label }) => {
 
     return (
         <Popper open={open} anchorEl={anchorEl.current} role={undefined} transition disablePortal>
-            {({TransitionProps}) => (
+            {({ TransitionProps }) => (
                 <Grow
                     { ...TransitionProps }
                     style={{ transformOrigin: 'center bottom' }}

@@ -4,11 +4,11 @@
  * and converts set to array to be returned.
  *
  * @param filter: String filter name
- * @param filteredData: array of data current filtered data
+ * @param filteredData: array of current filtered data
  * @returns Array of filter options
  */
 export const getFilterOptions = (filter, filteredData) =>
-    [...(filteredData.reduce((accumulator, entry) => {
+    [...filteredData.reduce((accumulator, entry) => {
         if (entry[filter]) accumulator.add(entry[filter]);
         return accumulator;
-    }, new Set()))];
+    }, new Set())];

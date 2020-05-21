@@ -1,14 +1,19 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import AuthContext from '../context/AuthContext';
 import Keycloak from 'keycloak-js';
 
-const AuthProvider = (props) => {
+import AuthContext from '../context/AuthContext';
+
+const AuthProvider = ({ children }) => {
     const [keycloakState, setKeycloakState] = useState({ keycloak: null, authenticated: false });
 
     useEffect(() => {
         const keycloak = Keycloak('/keycloak.json');
-        keycloak.init({ onLoad: 'check-sso', pkceMethod: 'S256' }).then(authenticated => {
-            setKeycloakState(prevState => ({...prevState, keycloak, authenticated}))
+        keycloak.init({
+            onLoad: 'check-sso',
+            pkceMethod: 'S256',
+            silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+        }).then(authenticated => {
+            setKeycloakState(prevState => ({ ...prevState, keycloak, authenticated }))
         });
     }, []);
 
@@ -16,18 +21,11 @@ const AuthProvider = (props) => {
         { keycloakState, setKeycloakState }
     ), [keycloakState]);
 
-    const ConsumerComponents = () => (
-        keycloakState.keycloak !== null
-        ? (
-            <AuthContext.Provider value={contextValue}>
-                {props.children}
-            </AuthContext.Provider>
-        ) : (
-            <></>
-        )
+    return (
+        <AuthContext.Provider value={contextValue}>
+            {keycloakState.keycloak !== null && children}
+        </AuthContext.Provider>
     );
-
-    return <ConsumerComponents />
 };
 
 export default AuthProvider;
